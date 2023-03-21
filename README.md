@@ -13,6 +13,7 @@ Printable LaTeX forms (and eventually supporting tools) for tracking workouts, f
     * Superset entries
 
 ## To Dos:
+* Document script usage
 * C25k progress log
 * Automated Calendar date generation
 * (Eventually) tools for scanning uploaded entries to generate stats charts
