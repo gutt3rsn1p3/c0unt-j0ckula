@@ -11,6 +11,24 @@ from pprint import pprint
 # Better inputs to come.
 
 
+def redundancy_chk(src_path):
+    if os.path.exists(src_path):
+        confirm = input("\'%s\' exists. Would you like to "
+                        "overwrite? [y\\N]: " % src_path)
+        if confirm not in ('y', 'Y'):
+            new_name = input('New file name: ')
+            src_path = "./src/workouts/%s.tex" % new_name
+    return src_path
+
+
+def write_latex(name, content):
+    file_name = './src/workouts/%s.tex' % name
+    src_file = redundancy_chk(file_name)
+    with open(src_file, 'w+') as outfile:
+        outfile.write(content)
+    return src_file
+
+
 def get_exercise():
     # *vomiting noises*
     # Building this to return a dict even though it's less efficient in
@@ -28,7 +46,7 @@ def get_exercise():
         'sets': sets
     }
     pprint(content)
-    confirm = input('Does this look correct? [y/n]:')
+    confirm = input('Does this look correct? [y/N]: ')
     if confirm in ('y', 'Y'):
         return content
 
@@ -55,9 +73,8 @@ def main():
                              'workout')
     parser.add_argument('-t', '--type', required='true', type=str,
                         help='Type of workout (for header)')
-    # parser.add_argument('--to-screen', action='store_true', dest='to_screen',
-    #                    help='Output resulting LaTeX to screen instead of to '
-    #                         'a file in the src/workouts directory')
+    parser.add_argument('--silent', action='store_true', dest='silent',
+                        help='Do not output resulting LaTeX to screen')
     # parser.add_argument('--dry-run', action='store_true', dest='dry',
     #                     help='Run without compiling')
     # TODO: Allow for date range input for bulk planning
@@ -86,8 +103,13 @@ def main():
         './src/templates/workout_wrapper.tex')
     full_workout = workout_template.render(workoutType=args.type,
                                            workoutContent=workout_body)
-    print()
-    print(full_workout)
+    if not args.silent:
+        # switch this later for something useful
+        os.system('clear')
+        print(full_workout)
+
+    # Write to file
+    src_file = write_latex(args.type, full_workout)
 
     # if not args.dry:
     # TODO: compile latex and move resulting file to the forms/workouts dir
