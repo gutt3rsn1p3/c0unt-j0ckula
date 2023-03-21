@@ -21,8 +21,14 @@ def redundancy_chk(src_path):
     return src_path
 
 
-def write_latex(name, content):
-    file_name = './src/workouts/%s.tex' % name
+def file_sanitize(name):
+    if ' ' in name:
+        name = name.replace(' ', '_').lower()
+    return name
+
+
+def write_latex(name, output_dir, content):    
+    file_name = '%s/%s.tex' % (output_dir, file_sanitize(name))
     src_file = redundancy_chk(file_name)
     with open(src_file, 'w+') as outfile:
         outfile.write(content)
@@ -73,8 +79,12 @@ def main():
                              'workout')
     parser.add_argument('-t', '--type', required='true', type=str,
                         help='Type of workout (for header)')
-    parser.add_argument('--silent', action='store_true', dest='silent',
-                        help='Do not output resulting LaTeX to screen')
+    parser.add_argument('-o', '--output', type=str,
+                        default='./src/workouts',
+                        help='Output directory for your LaTeX src result')
+    
+    # parser.add_argument('--silent', action='store_true', dest='silent',
+    #                     help='Do not output resulting LaTeX to screen')
     # parser.add_argument('--dry-run', action='store_true', dest='dry',
     #                     help='Run without compiling')
     # TODO: Allow for date range input for bulk planning
@@ -103,14 +113,18 @@ def main():
         './src/templates/workout_wrapper.tex')
     full_workout = workout_template.render(workoutType=args.type,
                                            workoutContent=workout_body)
-    if not args.silent:
+    # if not args.silent:
         # switch this later for something useful
-        os.system('clear')
-        print(full_workout)
+    #    os.system('clear')
+    #    print(full_workout)
 
     # Write to file
-    src_file = write_latex(args.type, full_workout)
+    src_file = write_latex(args.type, args.output, full_workout)
+    print("Output found at %s" % src_file )
+    print()
 
     # if not args.dry:
     # TODO: compile latex and move resulting file to the forms/workouts dir
+
+
 main()
