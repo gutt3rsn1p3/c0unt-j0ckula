@@ -2,6 +2,8 @@
 
 Printable LaTeX forms (and eventually supporting tools) for tracking workouts, for those of us who do cannot be trusted to wander off if tracking lifts digitally.
 
+**NOTE:** This is a quick and dirty project intended to get me up and running (heh), it is not intended to be a polished product.
+
 ## Currently Usable Forms
 * **Bimonthly progress calendar:** Make weekly goals, check off days, view monthly workout trends
 * **Weekly Weigh-in:** Track weight at start/end of week, calculate deltas
