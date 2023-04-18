@@ -27,7 +27,7 @@ def file_sanitize(name):
     return name
 
 
-def write_latex(name, output_dir, content):    
+def write_latex(name, output_dir, content):
     file_name = '%s/%s.tex' % (output_dir, file_sanitize(name))
     src_file = redundancy_chk(file_name)
     with open(src_file, 'w+') as outfile:
@@ -36,25 +36,19 @@ def write_latex(name, output_dir, content):
 
 
 def get_exercise():
-    # *vomiting noises*
-    # Building this to return a dict even though it's less efficient in
-    # the short term so I can load dicts in from file later and never talk
-    # to anyone ever again.
-    # TODO: build "superset" template & functionality
+    # TODO: build "superset" template & functionality, then retool this
+    #       since this is basically useless after I generalized the template
     name = input('Exercise Name: ')
-    weight = input('Weight (N/A if none): ')
-    reps = input('Reps per Set: ')
-    sets = input('Sets: ')
-    content = {
-        'name': name,
-        'weight': weight,
-        'reps': reps,
-        'sets': sets
-    }
-    pprint(content)
-    confirm = input('Does this look correct? [y/N]: ')
-    if confirm in ('y', 'Y'):
-        return content
+    # TODO: decide if the dict is still needed since the template is now
+    #       more generalized, or if a list would do
+    # content = {
+    #    'name': name,
+    # }
+    # pprint(content)
+    # confirm = input('Does this look correct? [y/N]: ')
+    # if confirm in ('y', 'Y'):
+    #    return content
+    return name
 
 
 def generate_workout(env, length):
@@ -62,10 +56,7 @@ def generate_workout(env, length):
     for exercise in range(length):
         content = get_exercise()
         template = env.get_template('./src/templates/single_exercise.tex')
-        workout_body += template.render(name=content['name'],
-                                        weight=content['weight'],
-                                        reps=content['reps'],
-                                        sets=content['sets'])
+        workout_body += template.render(name=content)
 
     return workout_body
 
@@ -82,7 +73,6 @@ def main():
     parser.add_argument('-o', '--output', type=str,
                         default='./src/workouts',
                         help='Output directory for your LaTeX src result')
-    
     # parser.add_argument('--silent', action='store_true', dest='silent',
     #                     help='Do not output resulting LaTeX to screen')
     # parser.add_argument('--dry-run', action='store_true', dest='dry',
@@ -114,13 +104,13 @@ def main():
     full_workout = workout_template.render(workoutType=args.type,
                                            workoutContent=workout_body)
     # if not args.silent:
-        # switch this later for something useful
+    #     switch this later for something useful
     #    os.system('clear')
     #    print(full_workout)
 
     # Write to file
     src_file = write_latex(args.type, args.output, full_workout)
-    print("Output found at %s" % src_file )
+    print("Output found at %s" % src_file)
     print()
 
     # if not args.dry:
