@@ -11,10 +11,17 @@ Printable LaTeX forms (and eventually supporting tools) for tracking workouts, f
 * **Templated daily workout entries:** Interactive LaTeX-formatted daily workout planning. WIP Items
     * Automatic LaTeX compilation
     * Superset entries
-    * Spacing/page breaks need some work
+    * Input redesign
+    * Spacing needs some work
 
 ## To Dos:
-* Document script usage
-* C25k progress log
-* Automated Calendar date generation
-* (Eventually) tools for scanning uploaded entries to generate stats charts
+* Static Forms
+    * C25k progress log
+    * Automated Calendar date generation
+* Housekeeping
+    * Clean up whitespace in templates and src (whoops)
+    * Document script usage
+* Planned Adjustments to Existing Templates
+    * Better alignment of core exercises with rest of workouts
+    * Move Barbell Shrug to Free Weights
+    * Add lower back prehab to Back and Chest
