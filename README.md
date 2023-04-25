@@ -10,7 +10,6 @@ Printable LaTeX forms (and eventually supporting tools) for tracking workouts, f
 * **Runners' Log:** Generic log for tracking basic run stats
 * **Templated daily workout entries:** Interactive LaTeX-formatted daily workout planning. WIP Items
     * Automatic LaTeX compilation
-    * Superset entries
     * Bodyweight exercise entries
     * Input redesign
 
