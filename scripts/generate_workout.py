@@ -35,29 +35,36 @@ def write_latex(name, output_dir, content):
     return src_file
 
 
-def get_exercise():
-    # TODO: build "superset" template & functionality, then retool this
-    #       since this is basically useless after I generalized the template
-    name = input('Exercise Name: ')
-    # TODO: decide if the dict is still needed since the template is now
-    #       more generalized, or if a list would do
-    # content = {
-    #    'name': name,
-    # }
-    # pprint(content)
-    # confirm = input('Does this look correct? [y/N]: ')
-    # if confirm in ('y', 'Y'):
-    #    return content
-    return name
+def get_superset_body(env):
+    complete = 'n'
+    superset_body = ' '
+    template = env.get_template('./src/templates/superset_line.tex')
+    while complete == 'n':
+        exercise_name = input('    Exercise Name: ')
+        superset_body += template.render(name=exercise_name)
+        complete = input('    Superset Complete? [y/N]: ').lower()
+    return superset_body
 
 
-def generate_workout(env, length):
-    workout_body = ''
-    for exercise in range(length):
-        content = get_exercise()
-        template = env.get_template('./src/templates/single_exercise.tex')
-        workout_body += template.render(name=content)
-
+def generate_workout_body(env):
+    # This method of choice looping is trash but idk for now
+    complete = 'n'
+    workout_body = ' '
+    exercise_template = env.get_template('./src/templates/single_exercise.tex')
+    superset_template = env.get_template(
+        './src/templates/superset_wrapper.tex')
+    while complete == 'n':
+        superset_bool = input("Superset? [y/N]: ").lower()
+        if superset_bool == 'y':
+            superset_name = input("Superset name: ").capitalize()
+            superset_content = get_superset_body(env)
+            workout_body += superset_template.render(
+                supersetname=superset_name,
+                exercises=superset_content)
+        else:
+            exercise = input('Exercise Name: ')
+            workout_body += exercise_template.render(name=exercise)
+        complete = input("Workout Complete? [y/N]: ").lower()
     return workout_body
 
 
@@ -65,9 +72,6 @@ def main():
     parser = \
         argparse.ArgumentParser(description='Dynamic LaTeX zine template '
                                             'generation tool')
-    parser.add_argument('-l', '--length', required='true', type=int,
-                        help='Number of exercises to be included in this'
-                             'workout')
     parser.add_argument('-t', '--type', required='true', type=str,
                         help='Type of workout (for header)')
     parser.add_argument('-o', '--output', type=str,
@@ -98,22 +102,17 @@ def main():
         autoescape=False,
         loader=jinja2.FileSystemLoader(os.path.abspath('.'))
     )
-    workout_body = generate_workout(latex_jinja_env, args.length)
+    workout_body = generate_workout_body(latex_jinja_env)
     workout_template = latex_jinja_env.get_template(
         './src/templates/workout_wrapper.tex')
     full_workout = workout_template.render(workoutType=args.type,
                                            workoutContent=workout_body)
-    # if not args.silent:
-    #     switch this later for something useful
-    #    os.system('clear')
-    #    print(full_workout)
 
     # Write to file
     src_file = write_latex(args.type, args.output, full_workout)
     print("Output found at %s" % src_file)
     print()
 
-    # if not args.dry:
     # TODO: compile latex and move resulting file to the forms/workouts dir
 
 
