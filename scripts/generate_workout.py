@@ -42,7 +42,7 @@ def get_superset_body(env):
     while complete == 'n':
         exercise_name = input('    Exercise Name: ')
         superset_body += template.render(name=exercise_name)
-        complete = input('    Superset Complete? [y/N]: ').lower()
+        complete = input('        Superset Complete? [y/N]: ').lower()
     return superset_body
 
 
@@ -56,7 +56,7 @@ def generate_workout_body(env):
     while complete == 'n':
         superset_bool = input("Superset? [y/N]: ").lower()
         if superset_bool == 'y':
-            superset_name = input("Superset name: ").capitalize()
+            superset_name = input("Superset name: ").capwords()
             superset_content = get_superset_body(env)
             workout_body += superset_template.render(
                 supersetname=superset_name,
@@ -64,7 +64,7 @@ def generate_workout_body(env):
         else:
             exercise = input('Exercise Name: ')
             workout_body += exercise_template.render(name=exercise)
-        complete = input("Workout Complete? [y/N]: ").lower()
+        complete = input("    Workout Complete? [y/N]: ").lower()
     return workout_body
 
 
